@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 
@@ -24,6 +25,7 @@ fun EditNameField(
     modifier: Modifier,
 ) {
     val focusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
     OutlinedTextField(
         value = value,
         onValueChange = { newValue ->
@@ -37,12 +39,14 @@ fun EditNameField(
                 contentDescription = null,
                 modifier = modifier.clickable {
                     onDone()
+                    keyboardController?.hide()
                 }
             )
         },
         keyboardOptions = keyboardOptions,
         keyboardActions = KeyboardActions(onDone = {
             onDone()
+            keyboardController?.hide()
             focusRequester.requestFocus()
         }),
         modifier = modifier.focusRequester(focusRequester)
